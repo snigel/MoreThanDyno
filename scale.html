@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en-US">
+    <head>
+        <link rel="icon" type="image/png" href="/graf/favicon.ico">
+        <meta charset="UTF-8">
+        <title>ScaleTool</title>
+        <script type="text/javascript" src="scale.js"></script>
+    </head>
+
+    <body>
+        <form name="pointform" method="post">
+            <div id="dyno" onclick="point_it(event)") style="background-size: cover; width:100%; background-size: contain; background-repeat: no-repeat;">
+                <img src="http://www.pyglet.org/doc/programming_guide/cursor_win_crosshair.png" id="cross" style="position:relative;visibility:hidden;z-index:2;">
+            </div>
+            X:<input type="text" name="form_x" size="8" /> Y:<input type="text" name="form_y" size="8" />
+        </form>
+
+        <table>
+            <tr><td>Scale img height to:</td><td><input type="text" id="height"> pixels.</td></tr>
+            <tr><td>Image url: </td><td><input type="text" id="url"></td></tr>
+            <tr><td><INPUT TYPE="button" Value="Load image" onClick="setImage()"> </td></tr>
+        </table>
+        
+        <table>
+            <tr><td>X coord 1</td><td><input type="text" id="x1"></td><td>RPM 1</td><td><input type="text" id="rpm1"></td></tr>
+            <tr><td>X coord 2</td><td><input type="text" id="x2"></td><td>RPM 2</td><td><input type="text" id="rpm2"></td></tr>
+            <tr><td>Y coord 1</td><td><input type="text" id="y1"></td><td>TRQ 1</td><td><input type="text" id="trq1"></td></tr>
+            <tr><td>Y coord 2</td><td><input type="text" id="y2"></td><td>TRQ 2</td><td><input type="text" id="trq2"></td></tr>
+        </table>
+        
+        <INPUT TYPE="button" Value="Rescale" onClick="setScale()">
+        <INPUT TYPE="button" Value="Reset" onClick="resetScale()">
+    </body>
+</html>

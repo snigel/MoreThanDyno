@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en-US">
+    <head>
+        <link rel="icon" type="image/png" href="/graf/favicon.ico">
+        <meta charset="UTF-8">
+        <title>MoreThanDyno</title>
+
+        <script type="text/javascript" src="pageTools.js"></script>
+        <script type="text/javascript" src="calcTools.js"></script>
+        <script type="text/javascript" src="motorcycles.js"></script>
+        <script type="text/javascript" src="canvasjs.min.js"></script>
+        <script type="text/javascript" src="json2.js"></script>
+
+        <script type="text/javascript">
+            window.onload = function () {
+                fetchLocalStorage();
+                updateDropdown();
+                setDefaultView();
+            }
+        </script>
+    </head>
+    <body>
+        <div id="compareBikesButtons" style="height: 300pix; width 50%;">
+            <FORM NAME="compareBikesForm" METHOD="GET">
+                <select id="compare1"> </select>
+                <select id="compare2"> </select>
+                <select id="compare3"> </select>
+                <INPUT TYPE="button" NAME="button" Value="Compare" 
+                onClick="compareBikes(eval(this.form.compare1.value), eval(this.form.compare2.value), eval(this.form.compare3.value))">
+            </FORM>
+        </div>
+
+        <div id="compareBikesGraph1" style="height: 400px; width: 100%;">
+            <div id="compareCompensated" style="float:left; width:50%"></div>
+            <div id="compareRaw" style="float:right; width:50%"></div>
+        </div>
+        
+        <div id="compareBikesGraph2" style="height: 400px; width: 100%;">
+            <div id="compareHp" style="float:left; width:50%"></div>
+            <div id="compareTrq" style="float:right; width:50%"></div>
+        </div>
+        
+        <div id="compareBikesGraph3" style="height: 400px; width: 100%;">
+            <div id="normHp" style="float:left; width:50%"></div>
+            <div id="normTrq" style="float:right; width:50%"></div>
+        </div>
+
+        <hr>
+
+        <div id="singleBikeForm" style="height: 30px; width 50%;">
+            <FORM NAME="singleBikeButton" METHOD="GET">
+                <select id="singleBike"></select>
+                <INPUT TYPE="button" Value="Load bike" onClick="showBike(eval(this.form.singleBike.value))">
+            </FORM>
+        </div>
+
+        <div id="singleBikeGraph" style="height: 400px; width: 100%;">
+            <div id="singleCompensated" style="float:left; width:50%"></div>
+            <div id="singleGearing" style="float:right; width:50%"></div>
+        </div>
+
+        <div id="customContainer" style="height: 600px; width: 100%;">
+            <div id="customBike" style="float:left; width: 50%;">
+                <FORM NAME="customBike" METHOD="GET">
+
+                <table>
+                    <tr><td><h3>Create custom vehicle:</h3></td></tr>
+                    <tr><td><select id="custom"></select></td></tr>
+                    <tr><td>
+                        <INPUT TYPE="button" Value="Load" onClick="createCustom(this.form)">
+                        <INPUT TYPE="button" Value="Save" onClick="writeBike()">
+                        <INPUT TYPE="button" Value="Remove" onClick="removeBike(this.form)">
+                        <INPUT TYPE="button" Value="Restore Defaults" onClick="restoreDefaults()">
+                    </td></tr>
+                </table>
+
+                <table>
+                    <tr><td><hr></td><td><hr></td></tr>
+                    <tr><td>Brand:</td><td><input type="text" id="brand"></td></tr>
+                    <tr><td>Model:</td><td><input type="text" id="model"></td></tr>
+                    <tr><td>Year:</td><td><input type="text" id="year"></td></tr>
+                    <tr><td><hr></td><td><hr></td></tr>
+                    <tr><td>Top Speed (GPS): </td><td><input type="text" id="topSpeed"></td></tr>
+                    <tr><td>Wet weight:</td><td><input type="text" id="wetWeight"></td></tr>
+                    <tr><td>Drag (Cd*A): </td><td><input type="text" id="drag"></td></tr>
+                    <tr><td><hr></td><td><hr></td></tr>
+                    <tr><td>Sprocket front: </td><td><input type="text" id="frontSprocket"></td></tr>
+                    <tr><td>Sprocket rear: </td><td><input type="text" id="rearSprocket"></td></tr>
+                    <tr><td>Primary reduction: </td><td><input type="text" id="primary"></td></tr>
+                </table>
+                
+                <table>
+                    <tr><td>Gearbox </td><td><input type="text" id="gearbox" size="31"></td></tr>
+                </table>
+                
+                <table>
+                    <tr><td><hr></td><td><hr></td></tr>
+                    <tr><td>Rim size: </td><td><input type="text" id="size"></td></tr>
+                    <tr><td>Tire width: </td><td><input type="text" id="width"></td></tr>
+                    <tr><td>Tire profile: </td><td><input type="text" id="profile"></td></tr>
+                </table>
+                
+                <table>
+                    <tr><td><hr></td><td><hr></td></tr>
+                    <tr><td>Dyno RPMx100: </td><td><input type="text" id="dynorpm" size="100"></td></tr>
+                    <tr><td>Dyno Torque: </td><td><input type="text" id="dynotorque" size="100"></td></tr>
+                    <tr><td>Dyno Source: </td><td><input type="text" id="dynosource" size="100"></td></tr>
+                </table>
+                
+                </form> 
+            </div>
+            <div id="export" style="float: right; width: 50%;"></div>
+        </div>
+    </body>
+</html>
