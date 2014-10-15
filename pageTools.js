@@ -133,7 +133,7 @@ function writeBike(){
     var rearSprocket = document.getElementById("rearSprocket").value;
     var primary = document.getElementById("primary").value;
     var gearbox = JSON.parse("[" + document.getElementById("gearbox").value + "]");
-    var wetWeight = document.getElementById("wetWeight").value;
+    var wetWeight = parseInt(document.getElementById("wetWeight").value);
     var size = document.getElementById("size").value;
     var width = document.getElementById("width").value;
     var profile = document.getElementById("profile").value;
@@ -141,7 +141,7 @@ function writeBike(){
     var dynorpm = multiplyAll(JSON.parse("[" + document.getElementById("dynorpm").value + "]"), 100);
     var dynotorque = JSON.parse("[" + document.getElementById("dynotorque").value + "]");
     var topSpeed = document.getElementById("topSpeed").value;
-    var drag = document.getElementById("drag").value;
+    var drag = parseFloat(document.getElementById("drag").value);
 
     var moto = {
         brand: brand, model: model, year: year, topSpeed: topSpeed, wetWeight: wetWeight, drag: drag, 
