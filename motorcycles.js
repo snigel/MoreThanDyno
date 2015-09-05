@@ -274,5 +274,29 @@ var motorcycles =  [
     dynosource: "http://s2.postimg.org/3z5b9nr1l/Streetfighter_dyno.jpg",
     dynorpm:    [4000,4500,5000,5500,6000,6500,7000,7500,8000,8500,9000,9500,10000,10500],
     dynotorque: [97,98,97,98,106,113,115,119,121,119,117,115,110,102]
+},
+{
+    brand: "Toyota",
+    model: "Landcruiser 4.2",
+    year: "99",
+    topSpeed: 160,
+    wetWeight: 2650,
+    drag: 1,
+
+    wheel:
+    {
+        size: 16,
+        width: 275,
+        profile: 70
+    }
+
+    primary: 4.1,
+    frontSprocket: 1,
+    rearSprocket: 1,
+    gearbox: [4.529,2.464,1.49,1,0.811,0.811],
+
+    dynosource: "https://files.slack.com/files-pri/T0504N3B2-F095N6AUT/slack_for_ios_upload.jpg",
+    dynorpm[1500,1750,2000,2200,2500,3000,3600,4000,4400],
+    dynotorque[270,278,280,285,280,270,250,240,210]
 }
 ];
