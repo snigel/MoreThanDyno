@@ -19,7 +19,7 @@ var motorcycles =  [
     wetWeight: 210,
     drag: 0.432,
 
-    wheel: {  
+    wheel: {
         size: 17,
         width: 160,
         profile: 60
@@ -41,7 +41,7 @@ var motorcycles =  [
     year:  "2001-2006",
     topSpeed:  250,
     wetWeight:  193,
-    drag:  0.35,		
+    drag:  0.35,
 
     wheel: {
         size:  17,
@@ -58,7 +58,7 @@ var motorcycles =  [
     dynosource:  "http://www.areapnolimits.com/images/product/cbr600f4i_dyno_big.gif, http://image.sportrider.com/f/8831852/dyno-2001-hon-f4i.gif",
     dynorpm:     [2000,  2500,  3000,  3500,  4000,  4500,  5000,  5500,  6000,  6500,  7000,  7500,  8000,  8500,  9000,  9500,  10000, 10500, 11000, 11500, 12000, 12500, 13000, 13500, 14000],
     dynotorque:  toNm([20,22,25,26,27,28,31,31,34,36,37,38,39,39,39,40,41,41,41,40,40,37,35,34,31])
-},	
+},
 {
     brand:  "Kawasaki",
     model:  "z750",
@@ -89,7 +89,7 @@ var motorcycles =  [
     year:  "2007-2009",
     wetWeight: 208,
     topSpeed: 0,
-    drag:  0.39,		
+    drag:  0.39,
 
     wheel: {
         size:  17,
@@ -184,7 +184,7 @@ var motorcycles =  [
     model:  "690 Duke",
     year:  "2008-2011",
     topSpeed:  0,
-    wetWeight:  160.6, 
+    wetWeight:  160.6,
     drag: 0.43,
 
     wheel: {
@@ -211,7 +211,7 @@ var motorcycles =  [
     wetWeight: 211,
     drag: 0.43,
 
-    wheel: {  
+    wheel: {
         size: 17,
         width: 180,
         profile: 55
@@ -259,7 +259,7 @@ var motorcycles =  [
     wetWeight: 197,
     drag: 0.5,
 
-    wheel: {  
+    wheel: {
         size: 17,
         width: 190,
         profile: 55
@@ -288,7 +288,7 @@ var motorcycles =  [
         size: 16,
         width: 275,
         profile: 70
-    }
+    },
 
     primary: 4.1,
     frontSprocket: 1,
@@ -296,7 +296,7 @@ var motorcycles =  [
     gearbox: [4.529,2.464,1.49,1,0.811,0.811],
 
     dynosource: "https://files.slack.com/files-pri/T0504N3B2-F095N6AUT/slack_for_ios_upload.jpg",
-    dynorpm[1500,1750,2000,2200,2500,3000,3600,4000,4400],
-    dynotorque[270,278,280,285,280,270,250,240,210]
+    dynorpm: [1500,1750,2000,2200,2500,3000,3600,4000,4400],
+    dynotorque: [270,278,280,285,280,270,250,240,210]
 }
 ];

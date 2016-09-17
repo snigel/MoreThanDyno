@@ -1,6 +1,6 @@
 function restoreDefaults(){
     localStorage.clear();
-    location.reload(); 
+    location.reload();
 }
 
 function cleanSelect(selectbox){
@@ -24,7 +24,7 @@ function fillSelect(select){
         option.text = motorcycles[i].brand+ " " + motorcycles[i].model + " " + motorcycles[i].year;
         option.value = i;
         select.add(option);
-    }  
+    }
 }
 
 function removeBike(bike){
@@ -52,7 +52,7 @@ function createChart(div, title, xtext, ytext, data){
         axisY:{ minimum: 0, title: ytext, titleFontSize: 18},
         data: data
     });
-    
+
     chart.render();
 }
 
@@ -79,10 +79,10 @@ function showBike(mc) {
     createChart("singleCompensated", "Optimal gearing & acceleration", "Speed in km/h", "Acceleration in Gs", getMCfor(motorcycles[mc],1));
     createChart("singleGearing", "Gearing", "Speed in km/h", "Power in newton", getMCgearing(motorcycles[mc]));
 }
-                
+
 function compareBikes(mc1,mc2,mc3) {
     var data;
-    
+
     data = getMC(motorcycles[mc1],1).concat(getMC(motorcycles[mc2],1)).concat(getMC(motorcycles[mc3],1));
     createChart("compareCompensated", "Vehicle acceleration", "Speed in km/h", "Acceleration in Gs", data);
 
@@ -144,8 +144,8 @@ function writeBike(){
     var drag = parseFloat(document.getElementById("drag").value);
 
     var moto = {
-        brand: brand, model: model, year: year, topSpeed: topSpeed, wetWeight: wetWeight, drag: drag, 
-        wheel: {size: size, width: width, profile: profile}, primary: primary,frontSprocket: frontSprocket, rearSprocket: rearSprocket, 
+        brand: brand, model: model, year: year, topSpeed: topSpeed, wetWeight: wetWeight, drag: drag,
+        wheel: {size: size, width: width, profile: profile}, primary: primary,frontSprocket: frontSprocket, rearSprocket: rearSprocket,
         gearbox: gearbox, dynosource: dynosource, dynorpm: dynorpm, dynotorque: dynotorque
     };
 
@@ -190,7 +190,7 @@ function exportVehicle(){
     str += s+s+"size: " + size + "," + b;
     str += s+s+"width: " + width + "," + b;
     str += s+s+"profile: " + profile + b;
-    str += s+"}" + b;
+    str += s+"}," + b;
     str += b;
     str += s+"primary: " + primary + "," + b;
     str += s+"frontSprocket: " + frontSprocket + "," + b;
@@ -198,8 +198,8 @@ function exportVehicle(){
     str += s+"gearbox: " + "[" + gearbox + "]" + "," + b;
     str += b;
     str += s+"dynosource: \"" + dynosource + "\"" + "," + b;
-    str += s+"dynorpm" + "[" + dynorpm + "]" + "," + b;
-    str += s+"dynotorque" +  "[" + dynotorque + "]" + b;
+    str += s+"dynorpm: " + "[" + dynorpm + "]" + "," + b;
+    str += s+"dynotorque: " +  "[" + dynotorque + "]" + b;
     str += "}";
     document.getElementById("export").innerHTML = str;
 }
