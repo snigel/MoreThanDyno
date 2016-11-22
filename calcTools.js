@@ -52,7 +52,7 @@ function cleanOverlap(gearbox){
             gearbox[i] = cleanFront(gearbox[i], gearbox[i-1]);
         }
     }
-    
+
     for(i = 0; i<gearbox.length; i++){
         if(i+1 < gearbox.length){
             gearbox[i] = cleanTail(gearbox[i], gearbox[i+1]);
@@ -68,7 +68,7 @@ function rpmtospeed(rpm, gear, motorcycle) {
     var wheelrpm = rpm/effGearbox(motorcycle)[gear];
     var wheelLength = wheelRadius(motorcycle.wheel) * 2 * Math.PI;
     var mstokmh = 60/1000;
-    
+
     return wheelrpm * wheelLength * mstokmh;
 }
 
@@ -76,7 +76,7 @@ function wheelRadius(wheel) {
     var size = wheel.size*2.54 //to cm
     var width = wheel.width/10 //to cm
     var profile = wheel.profile/100 //to percent
-    
+
     return (size + 2*width*profile) / 2 / 100;
 }
 
@@ -87,7 +87,7 @@ function effGearbox(motorcycle){
     for (i = 0; i < motorcycle.gearbox.length; ++i) {
         effGearbox.push(motorcycle.gearbox[i]*motorcycle.primary*motorcycle.rearSprocket/motorcycle.frontSprocket);
     }
-    
+
     return effGearbox;
 }
 
@@ -111,13 +111,13 @@ function compensate(gearbox, motorcycle){
 
 function thrust(motorcycle, gear){
     var arr = new Array();
-    
+
     var i;
     for (i = 0; i < motorcycle.dynorpm.length; ++i) {
         var speed = rpmtospeed(motorcycle.dynorpm[i],gear, motorcycle);
         var force = effectiveForce(motorcycle.dynotorque[i], gear, motorcycle);
         var rpm = +Math.round(motorcycle.dynorpm[i]);
-        arr.push({  
+        arr.push({
             x: speed,
             y: force,
             label: motorcycle.model+" - Gear: "+(gear+1)+", "+rpm+" RPM, "+ Math.round(speed) +" km/h "+Math.round(force)+" N "
@@ -150,11 +150,11 @@ function getMC(motorcycle, choice) {
 
     cleanOverlap(gear);
     var gears = gear[0].concat(gear[1]).concat(gear[2]).concat(gear[3]).concat(gear[4]).concat(gear[5]);
-    
+
     return [{type: "line", toolTipContent: "{label}", showInLegend: true, legendText: motorcycle.brand+" "+motorcycle.model, dataPoints: gears}];                
 }
 
-function getMCfor (motorcycle, choice) {
+function getMCfor(motorcycle, choice) {
     if(motorcycle === undefined){
         return [];
     }
@@ -189,14 +189,14 @@ function getMCgearing(motorcycle) {
     var i;
     for (i = 0; i < motorcycle.gearbox.length; i++) {
         arr.push({
-            type: "line", 
-            showInLegend:true, 
-            legendText: "Gear "+(i+1), 
+            type: "line",
+            showInLegend:true,
+            legendText: "Gear "+(i+1),
             toolTipContent: "{label}", dataPoints: gear[i]
         });
     }
-    
-    return arr;	
+
+    return arr;
 }
 
 function getMCpow(motorcycle, norm) {
@@ -212,14 +212,14 @@ function getMCpow(motorcycle, norm) {
     }
 
     var arr = [];
-    
+
     var i;
     for (i = 0; i < motorcycle.dynorpm.length; ++i) {
         var hp = Math.round(motorcycle.dynorpm[i]*motorcycle.dynotorque[i]/7023.5);
         var rpm = Math.round(motorcycle.dynorpm[i]/norm);
         arr.push({x: rpm, y: hp, label: ""})
     }
-    
+
     return [{
         type: "line",
         showInLegend:true,
@@ -242,14 +242,14 @@ function getMCtrq(motorcycle, norm) {
     }
 
     var arr = [];
-    
+
     var i;
     for (i = 0; i < motorcycle.dynorpm.length; ++i) {
         var rpm = Math.round(motorcycle.dynorpm[i]/norm);
         var trq = Math.round(motorcycle.dynotorque[i]*norm);
         arr.push({x: rpm, y: trq, label: ""})
     }
-    
+
     return [{
         type: "line",
         showInLegend:true,
@@ -269,23 +269,22 @@ function roundAll(arr, decimals){
     }
 
     var out = arr.slice();
-    
+
     var i;
-    for(i = 0; i < out.length; i++){ 
-        out[i] = Math.round(out[i]*Math.pow(10, decimals))/Math.pow(10, decimals); 
+    for(i = 0; i < out.length; i++){
+        out[i] = Math.round(out[i]*Math.pow(10, decimals))/Math.pow(10, decimals);
     }
-    
+
     return out;
 }
 
 function multiplyAll(arr, float){
     var out = [];
-    
+
     var i;
     for(i = 0; i < arr.length; i++){
         out[i] = arr[i]*float;
     }
-    
+
     return out;
 }
-
