@@ -1,18 +1,20 @@
-function cleanFront(gearx, geary){
-    var tempgear = gearx.slice();
+function cleanFront(gearHi, gearLo){
+    //Use slice to copy array.
+    var tempgear = gearHi.slice();
 
     var index;
-    for (index = 0; index < gearx.length; ++index) {
-        var speed_h = gearx[index].x;
-        var power_h = gearx[index].y;
+    for (index = 0; index < gearHi.length; ++index) {
+        var speed_h = gearHi[index].x;
+        var power_h = gearHi[index].y;
 
         var lindex;
-        for(lindex = 0; lindex < geary.length; ++lindex){
-            var speed_l = geary[lindex].x;
+        for(lindex = 0; lindex < gearLo.length; ++lindex){
+            var speed_l = gearLo[lindex].x;
 
-            if(speed_l >= speed_h){
-                var sindex = tempgear.indexOf(gearx[index]);
-                if (lindex!= 0 && geary[lindex-1].y > power_h && geary[lindex-1].x < speed_h){
+            if(speed_l > speed_h){
+                var sindex = tempgear.indexOf(gearHi[index]);
+                if (lindex != 0 && gearLo[lindex-1].y > power_h && gearLo[lindex-1].x < speed_h){
+                    //Remove at index.
                     tempgear.splice(sindex,1);
                 }
                 if(lindex == 0){
@@ -24,20 +26,20 @@ function cleanFront(gearx, geary){
     return tempgear;
 }
 
-function cleanTail(gearx, geary){
-    var tempgear = gearx.slice();
+function cleanTail(gearLo, gearHi){
+    var tempgear = gearLo.slice();
 
     var index;
-    for (index = 0; index < gearx.length; ++index) {
-        var speed_l = gearx[index].x;
-        var power_l= gearx[index].y;
+    for (index = 0; index < gearLo.length; ++index) {
+        var speed_l = gearLo[index].x;
+        var power_l= gearLo[index].y;
 
         var lindex;
-        for(lindex = 0; lindex < geary.length; ++lindex){
-            var speed_h = geary[lindex].x;
+        for(lindex = 0; lindex < gearHi.length; ++lindex){
+            var speed_h = gearHi[lindex].x;
 
             if(speed_l > speed_h){
-                var sindex = tempgear.indexOf(gearx[index]);
+                var sindex = tempgear.indexOf(gearHi[index]);
                 tempgear.splice(sindex,1);
             }
         }
@@ -47,21 +49,17 @@ function cleanTail(gearx, geary){
 
 function cleanOverlap(gearbox){
     var i;
-    for(i = 0; i<gearbox.length; i++){
-        if(i > 0){
-            gearbox[i] = cleanFront(gearbox[i], gearbox[i-1]);
-        }
+    for(i = 1; i < gearbox.length; i++){
+        gearbox[i] = cleanFront(gearbox[i], gearbox[i-1]);
     }
 
-    for(i = 0; i<gearbox.length; i++){
-        if(i+1 < gearbox.length){
-            gearbox[i] = cleanTail(gearbox[i], gearbox[i+1]);
-        }
+    for(i = 1; i < gearbox.length; i++){
+        gearbox[i-1] = cleanTail(gearbox[i-1], gearbox[i]);
     }
 }
 
 function effectiveForce(torque, gear, motorcycle) {
-    return torque * effGearbox(motorcycle)[gear] / wheelRadius(motorcycle.wheel);		
+    return torque * effGearbox(motorcycle)[gear] / wheelRadius(motorcycle.wheel);
 }
 
 function rpmtospeed(rpm, gear, motorcycle) {
@@ -100,7 +98,7 @@ function compensate(gearbox, motorcycle){
             var speed = gearbox[i][j].x;
             var force = gearbox[i][j].y;
             // v^2 * 0.5 * air fluidity at 20c * CdA
-            var drag  = (speed/3.6) * (speed/3.6) * 0.5 * 1.2 * motorcycle.drag; 
+            var drag  = (speed/3.6) * (speed/3.6) * 0.5 * 1.2 * motorcycle.drag;
             var power = (force - drag) / (motorcycle.wetWeight + driverWeight) / 9.82;
             gearbox[i][j].y = power;
             gearbox[i][j].label = motorcycle.model+" - Gear: "+(i+1)+", "+Math.round(motorcycle.dynorpm[j])+" RPM, "+
@@ -149,7 +147,10 @@ function getMC(motorcycle, choice) {
     }
 
     cleanOverlap(gear);
-    var gears = gear[0].concat(gear[1]).concat(gear[2]).concat(gear[3]).concat(gear[4]).concat(gear[5]);
+    var gears = gear[0];
+    for(index = 1; index < gear.length; index++){
+        gears = gears.concat(gear[index]);
+    }
 
     return [{type: "line", toolTipContent: "{label}", showInLegend: true, legendText: motorcycle.brand+" "+motorcycle.model, dataPoints: gears}];                
 }
@@ -166,8 +167,10 @@ function getMCfor(motorcycle, choice) {
     }
 
     cleanOverlap(gear);
-    var gears = gear[0].concat(gear[1]).concat(gear[2]).concat(gear[3]).concat(gear[4]).concat(gear[5]);
-
+    var gears = gear[0];
+    for(index = 1; index < gear.length; index++){
+        gears = gears.concat(gear[index]);
+    }
     return [
         {type: "line", toolTipContent: "{label}", showInLegend: true, legendText: motorcycle.brand+" "+motorcycle.model, dataPoints: gears},
         {type: "line", dataPoints: gear[0]}, {type: "line", dataPoints: gear[1]}, {type: "line", dataPoints: gear[2]},
