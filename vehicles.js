@@ -244,7 +244,7 @@ var vehicles =  [
     wetWeight: 940,
     drag: 0,
 
-    wheel: {  
+    wheel: {
         size: 14,
         width: 185,
         profile: 60
@@ -362,6 +362,32 @@ var vehicles =  [
     dynoRpm: [1000,1500,2000,2500,3000,3500,4000,4500],
     dynoTorque: [220,360,380,380,370,351,312,265],
     revLimit: 0,
+    metric: true
+},
+{
+    brand: "Suzuki",
+    model: "GSX-R 1000",
+    year: "2007-2008",
+    topSpeed: 299,
+    wetWeight: 208,
+    drag: 0,
+
+    wheel:
+    {
+        size: 17,
+        width: 190,
+        profile: 50
+    },
+
+    primary: 1.553,
+    frontSprocket: 17,
+    rearSprocket: 43,
+    gearbox: [2.563,2.053,1.714,1.5,1.36,1.269],
+
+    dynoSource: "http://www.motorcyclenews.com/upload/261608/images/new-curves.jpg",
+    dynoRpm: [3000,3500,4000,4500,5000,5500,6000,6500,7000,7500,8000,8500,9000,9500,10000,10500,11000,11500,12000,12500,13000,13200],
+    dynoTorque: [70,78,74,81,88,90,93,97,100,102,104,106,106,107,106,106,104,102,100,95,91,87],
+    revLimit: 13200,
     metric: true
 }
 ];
