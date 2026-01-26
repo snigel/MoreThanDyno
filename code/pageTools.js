@@ -96,7 +96,7 @@ function fetchLocalStorage() {
 }
 
 function showVehicle(v) {
-    createChart("singleCompensated", "Optimal shifting.", "Speed in km/h", "Power in Gs", shiftGraph(vehicles[v], 1));
+    createChart("singleCompensated", "Optimal shifting.", "Speed in km/h", "Power in Gs", shiftGraph(vehicles[v]));
     createChart("singleGearing", "All gears", "Speed in km/h", "Power in newton", gearingGraph(vehicles[v]));
 }
 
@@ -128,10 +128,9 @@ function compareVehicles(v1, v2, v3) {
     createChart("compareDifference",
                 "Acceleration difference in %",
                 "Speed in km/h",
-                "Acceleration in G",
+                "Acceleration difference %",
                 [bs1, bs2, bs3],
-                -0,
-                3
+                -0
     )
                 
 
@@ -152,12 +151,12 @@ function compareVehicles(v1, v2, v3) {
     coordinates = torqueGraph(vehicles[v1], weight)
     coordinates = coordinates.concat(torqueGraph(vehicles[v2], 1))
     coordinates = coordinates.concat(torqueGraph(vehicles[v3], 1));
-    createChart("compareTrq", "Engine torque, normalized by rpm", "RPM", "Nm", coordinates);
+    createChart("compareTrq", "Engine torque, normalized by rev limit", "RPM", "Nm", coordinates);
 
     coordinates = hpGraph(vehicles[v1], 1)
     coordinates = coordinates.concat(hpGraph(vehicles[v2], 1))
     coordinates = coordinates.concat(hpGraph(vehicles[v3], 1));
-    createChart("compareHp", "Engine power, normalized by rpm", "RPM", "WHP", coordinates);
+    createChart("compareHp", "Engine power, normalized by rev limit", "RPM", "WHP", coordinates);
 
     coordinates = torqueGraph(vehicles[v1])
     coordinates = coordinates.concat(torqueGraph(vehicles[v2]))
@@ -204,7 +203,6 @@ function initVehicles(){
         //If rev limit is missing.
         if(v.revLimit == 0){
             v.revLimit = v.dynoRpm[v.dynoRpm.length-1];
-            console.log(v.dynoRpm[v.dynoRpm.length-1] + " " + v.revLimit);
         }
     }
 }

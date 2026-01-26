@@ -125,7 +125,7 @@ function speed2rpm(vehicle, gear, speed){
     // Calculate speed from rpm.
     let ms = speed / 3.6; // km/h to m/s
     let wheelrpm = ms / (getWheelRadius(vehicle.wheel) * 2 * Math.PI) * 60;
-    return wheelrpm * getGearRatio(vehicle, gear);
+    return Math.round(wheelrpm * getGearRatio(vehicle, gear));
 }
 
 function rpm2speed(vehicle, gear, rpm) {
@@ -177,35 +177,27 @@ function calcResistance(gearbox, vehicle, calcAero){
         //Loop to find element above top speed.
         let topGear = gearbox[gearbox.length-1];
 
-        // WIP fix this
-        console.log(gearbox.length-1)
-
         for(let rpm = 0; rpm < topGear.length; rpm++){
             if(topGear[rpm].x > vehicle.topSpeed){
                 if(rpm == 0){
                     topGear = gearbox[gearbox.length-2]
                 }
                 else {
-                // Insert a new element at this location.
-                // Clone the element and add it.
-                console.log("HIT", topGear[rpm].x, vehicle.model, rpm)
-                let power = kxym(topGear, rpm, vehicle.topSpeed);  //function kxym(gear, index, xvalue){
-                // Skicka in koordinater för en växel
-                // Skicka in indexet för högre än top speed
-                // Tillbaka ska ett nytt y komma, punkten som ligger mellan 
-                //let slice = topGear.slice((rpm-1), rpm)[0];
-                topGear.splice(rpm, 0, {"x":0,"Y":0, "label":"Empty"});
-                // Modify the cloned element.
+                    // Insert a new element at this location.
+                    // Clone the element and add it.
+                    let power = kxym(topGear, rpm, vehicle.topSpeed);  
+                    //function kxym(gear, index, xvalue){
+                    // Send coords for a gear
+                    // Send the index for above top speed.
+                    // A new Y will be returned, the point that is inbetween.
+                    //let slice = topGear.slice((rpm-1), rpm)[0];
+                    topGear.splice(rpm, 0, {"x":0,"Y":0, "label":"Empty"});
+                    // Modify the cloned element.
 
-                console.log("spd old: ", topGear[rpm-1].x); // = vehicle.topSpeed;
-                console.log("spd new: ", topGear[rpm].x) // = vehicle.topSpeed;
-                console.log("pow old ", topGear[rpm-1].y = power);
-                console.log("pow new ", topGear[rpm].y = power);
-                topGear[rpm].label = "Interpolated point"
-                topGear[rpm].x = vehicle.topSpeed;
-                topGear[rpm].y = power;
-                console.log("NO HIT")
-                break;
+                    topGear[rpm].label = "Interpolated point"
+                    topGear[rpm].x = vehicle.topSpeed;
+                    topGear[rpm].y = power;
+                    break;
                 }  
             }
         }
@@ -286,7 +278,7 @@ function getVehicleDrag(vehicle){
             return drag;
         }
     }
-    console.log("Warning: " + vehicle.brand + " " + vehicle.model + "has top speed above max dyno rpm, drag may be inaccurate.");
+    console.log("Warning: " + vehicle.brand + " " + vehicle.model + " has its top speed above max dyno rpm, drag may be inaccurate.");
     var power = kxym(topGear, (topGear.length-1), vehicle.topSpeed);
 
     //Calculate drag value from interpolation.
