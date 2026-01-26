@@ -6,15 +6,15 @@ function init(){
 }
 
 function setDefaultView(){
-    //Change showVehicle values to show different vehicles as default.
+    // To change vechicles, select option value and function value-1.
 
     document.getElementById("singleVehicle").options[3].selected = true;
     showVehicle(2);
 
-    document.getElementById("compare1").options[1].selected = true;
-    document.getElementById("compare2").options[2].selected = true;
-    document.getElementById("compare3").options[3].selected = true;
-    compareVehicles(0, 1, 2);
+    document.getElementById("compare1").options[2].selected = true;
+    document.getElementById("compare2").options[14].selected = true;
+    document.getElementById("compare3").options[5].selected = true;
+    compareVehicles(1, 13, 4);
 
     document.getElementById("custom").options[1].selected = true;
     loadVehicleStats(0);
@@ -30,7 +30,7 @@ function updateAllDropdowns(){
 }
 
 function updateDropdown(select){
-    //Used to update a single dropdown menu.
+    // Updates a single dropdown menu.
     purgeDropdown(select);
 
     for(i = 0; i < vehicles.length; i++){
@@ -64,21 +64,27 @@ function restoreDefaults(){
     location.reload();
 }
 
-function createChart(div, title, xtext, ytext, coordinates, min){
+function createChart(div, title, xtext, ytext, coordinates, min, max){
 
     let chart = new CanvasJS.Chart(div,
     {
         title:  { text: title, fontSize: 26},
         legend: { horizontalAlign: "center", verticalAlign: "bottom", fontSize: 15},
-        axisX:  { minimum: 0,   title: xtext, titleFontSize: 18},
-        axisY:  { minimum: min, title: ytext, titleFontSize: 18},
+        axisX: {
+            title: xtext,
+            titleFontSize: 18,
+            labelFormatter: function (e) {
+                return Number(e.value);
+            }
+        },
+        axisXType: "linear",
+
+        axisY:  { minimum: min, maximum: max, title: ytext, titleFontSize: 18},
         data:   coordinates
     });
 
     chart.render();
 }
-
-
 
 function fetchLocalStorage() {
     let storage = JSON.parse(localStorage.getItem("vehicles"));
@@ -98,30 +104,69 @@ function compareVehicles(v1, v2, v3) {
     let coordinates;
 
     let weight = true;
-    let aero = 1;
-    coordinates = thrustGraph(vehicles[v1],weight,aero).concat(thrustGraph(vehicles[v2],weight,aero)).concat(thrustGraph(vehicles[v3],weight,aero));
-    createChart("compareWeightAir", "Thrust compensated for weight and air resistance", "Speed in km/h", "Acceleration in G", coordinates, 0);
+    let aero = true;
+    coordinates = thrustGraph(vehicles[v1],weight,aero);
+    coordinates = coordinates.concat(thrustGraph(vehicles[v2],weight,aero));
+    coordinates = coordinates.concat(thrustGraph(vehicles[v3],weight,aero));
+
+    createChart("compareWeightAir",
+            "Thrust compensated for weight and air resistance",
+            "Speed in km/h",
+            "Acceleration in G",
+            coordinates,
+            0
+    ); // 0 for Y-min
+
+
+    // Do percentage comparison
+
+    bs1 = percentGraph(vehicles[v1], vehicles[v1])
+    bs2 = percentGraph(vehicles[v1], vehicles[v2])
+    bs3 = percentGraph(vehicles[v1], vehicles[v3])
+    
+
+    createChart("compareDifference",
+                "Acceleration difference in %",
+                "Speed in km/h",
+                "Acceleration in G",
+                [bs1, bs2, bs3],
+                -0,
+                3
+    )
+                
 
     weight = true;
-    aero = 0;
-    coordinates = thrustGraph(vehicles[v1],weight,aero).concat(thrustGraph(vehicles[v2],weight,aero)).concat(thrustGraph(vehicles[v3],weight,aero));
+    aero = false;
+    coordinates = thrustGraph(vehicles[v1],weight,aero)
+    coordinates = coordinates.concat(thrustGraph(vehicles[v2],weight,aero))
+    coordinates = coordinates.concat(thrustGraph(vehicles[v3],weight,aero));
     createChart("compareWeight", "Thrust to weight ratio", "Speed in km/h", "Power in newton", coordinates);
 
     weight = false;
-    aero = 0;
-    coordinates = thrustGraph(vehicles[v1],weight,aero).concat(thrustGraph(vehicles[v2],weight,aero)).concat(thrustGraph(vehicles[v3],weight,aero));
+    aero = false;
+    coordinates = thrustGraph(vehicles[v1],weight,aero)
+    coordinates = coordinates.concat(thrustGraph(vehicles[v2],weight,aero))
+    coordinates = coordinates.concat(thrustGraph(vehicles[v3],weight,aero));
     createChart("compareRaw", "Raw thrust", "Speed in km/h", "Power in newton", coordinates); 
 
-    coordinates = torqueGraph(vehicles[v1], weight).concat(torqueGraph(vehicles[v2], 1)).concat(torqueGraph(vehicles[v3], 1));
+    coordinates = torqueGraph(vehicles[v1], weight)
+    coordinates = coordinates.concat(torqueGraph(vehicles[v2], 1))
+    coordinates = coordinates.concat(torqueGraph(vehicles[v3], 1));
     createChart("compareTrq", "Engine torque, normalized by rpm", "RPM", "Nm", coordinates);
 
-    coordinates = hpGraph(vehicles[v1], 1).concat(hpGraph(vehicles[v2], 1)).concat(hpGraph(vehicles[v3], 1));
+    coordinates = hpGraph(vehicles[v1], 1)
+    coordinates = coordinates.concat(hpGraph(vehicles[v2], 1))
+    coordinates = coordinates.concat(hpGraph(vehicles[v3], 1));
     createChart("compareHp", "Engine power, normalized by rpm", "RPM", "WHP", coordinates);
 
-    coordinates = torqueGraph(vehicles[v1]).concat(torqueGraph(vehicles[v2])).concat(torqueGraph(vehicles[v3]));
+    coordinates = torqueGraph(vehicles[v1])
+    coordinates = coordinates.concat(torqueGraph(vehicles[v2]))
+    coordinates = coordinates.concat(torqueGraph(vehicles[v3]));
     createChart("normTrq", "Engine torque", "RPM", "Nm", coordinates);
 
-    coordinates = hpGraph(vehicles[v1]).concat(hpGraph(vehicles[v2])).concat(hpGraph(vehicles[v3]));
+    coordinates = hpGraph(vehicles[v1])
+    coordinates = coordinates.concat(hpGraph(vehicles[v2]))
+    coordinates = coordinates.concat(hpGraph(vehicles[v3]));
     createChart("normHp", "Engine power", "RPM", "WHP", coordinates);
 }
 
@@ -184,13 +229,6 @@ function loadVehicleStats(v1){
     document.getElementById("dynoSource").value =    v.dynoSource;
     document.getElementById("topSpeed").value =      v.topSpeed;
     document.getElementById("drag").value =          v.drag;
-
-
-
-
-
-    //TODO: Remove this call.
-    //topSpeed(v);
     
     let b = "<br>";
     let s = "&nbsp;&nbsp;&nbsp;&nbsp;"
@@ -224,7 +262,7 @@ function loadVehicleStats(v1){
 }
 
 function writeVehicle(){
-    //Saves a custom vehicle to local html5 storage.
+    // Saves a custom vehicle to local html5 storage.
     let brand =         document.getElementById("brand").value;
     let model =         document.getElementById("model").value;
     let year =          document.getElementById("year").value;
@@ -258,8 +296,8 @@ function writeVehicle(){
 }
 
 function exportVehicle(){
-    //This function shows vehicle data formatted so it can be added to motorcycles.js
-    //For users so they can give their vehicle data to the maintainers.
+    // This function shows vehicle data formatted so it can be added to motorcycles.js
+    // For users so they can give their vehicle data to the maintainers.
     let brand =         document.getElementById("brand").value;
     let model =         document.getElementById("model").value;
     let year =          document.getElementById("year").value;

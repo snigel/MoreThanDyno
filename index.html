@@ -1,16 +1,16 @@
 <!DOCTYPE html>
 <html lang="en-US">
     <head>
-        <link rel="icon" type="image/png" href="/graf/favicon.ico">
+        <link rel="icon" type="image/png" href="assets/favicon.ico">
         <meta charset="UTF-8">
         <title>MoreThanDyno</title>
 
-        <script type="text/javascript" src="pageTools.js"></script>
-        <script type="text/javascript" src="calcTools.js"></script>
-        <script type="text/javascript" src="vehicles.js"></script>
-        <script type="text/javascript" src="graphs.js"></script>
-        <script type="text/javascript" src="canvasjs.min.js"></script>
-        <script type="text/javascript" src="json2.js"></script>
+        <script type="text/javascript" src="code/pageTools.js"></script>
+        <script type="text/javascript" src="code/calcTools.js"></script>
+        <script type="text/javascript" src="code/vehicles.js"></script>
+        <script type="text/javascript" src="code/graphs.js"></script>
+        <script type="text/javascript" src="libs/canvasjs.min.js"></script>
+        <script type="text/javascript" src="libs/json2.js"></script>
 
         <script type="text/javascript">
             window.onload = function () {
@@ -19,7 +19,7 @@
         </script>
     </head>
     <body>
-        <div id="compareVehiclesButtons" style="height: 300pix; width 50%;">
+        <div id="compareVehiclesButtons" style="height: 300pix; width: 50%;">
             <FORM NAME="compareVehiclesForm" METHOD="GET">
                 <select id="compare1"> </select>
                 <select id="compare2"> </select>
@@ -30,9 +30,13 @@
         </div>
 
         <div id="compareVehiclesGraph1" style="height: 400px; width: 100%;">
-            <div id="compareWeightAir" style="float:left; width:33%"><br style="clear: left;" /></div>
-            <div id="compareWeight" style="margin:auto; width:33%"><br style="clear: left;" /></div>
-            <div id="compareRaw" style="float:right; width:33%"><br style="clear: left;" /></div>          
+            <div id="compareWeightAir" style="float:left; width:50%"><br style="clear: left;" /></div>
+            <div id="compareDifference" style="float:right; width:50%"><br style="clear: left;" /></div>
+        </div>
+
+        <div id="compareVehiclesGraph1" style="height: 400px; width: 100%;">
+            <div id="compareWeight" style="float:right; width:50%"><br style="clear: left;" /></div>      
+            <div id="compareRaw" style="float:left; width:50%"><br style="clear: left;" /></div>          
         </div>
         
         <div id="compareVehiclesGraph2" style="height: 400px; width: 100%;">
@@ -47,7 +51,7 @@
 
         <hr>
 
-        <div id="singleVehicleForm" style="height: 30px; width 50%;">
+        <div id="singleVehicleForm" style="height: 30px; width:50%;">
             <FORM NAME="singleVehicleButton" METHOD="GET">
                 <select id="singleVehicle"></select>
                 <INPUT TYPE="button" Value="Load Vehicle" onClick="showVehicle(eval(this.form.singleVehicle.value))">

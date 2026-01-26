@@ -22,7 +22,6 @@ function removeGearOverlap(vehicle, gearbox){
             }
         }
         
-
         //Remove less powerful low rpms from high gear.
         var spliced = false;
         for(hiSpeed = 0; hiSpeed < gearbox[gear+1].length; hiSpeed++){
@@ -75,7 +74,7 @@ function removeGearOverlap(vehicle, gearbox){
 
         }
         //Finally, always interpolate a new point for hi gear that meets low gear.
-        let loTopSpeed = gearbox[gear][gearbox[gear].length-1].x;
+        let loTopSpeed = gearbox[gear][gearbox[gear].length-1].x + 1;
         gearbox[gear+1][0].y = kxym(gearbox[gear+1], 1, loTopSpeed);
         gearbox[gear+1][0].x = loTopSpeed;
     }
@@ -83,7 +82,7 @@ function removeGearOverlap(vehicle, gearbox){
 }
 
 function topSpeedSprockets(v){
-        //Find real sprocket combinations.
+        // Find real sprocket combinations.
         console.log(" ");
         console.log("Test sprocket combos!");
     
@@ -95,7 +94,7 @@ function topSpeedSprockets(v){
             }
         }
     
-        function mycomparator(a,b) {
+        function mycomparator(a, b) {
             return parseInt(a.speed, 10) - parseInt(b.speed, 10);
         }
 
@@ -113,8 +112,8 @@ function topSpeedSprockets(v){
 }
 
 function concatGears(gearbox){
-    //This function concatenates all gears to a single array.
-    //Used after overlap has been removed.
+    // This function concatenates all gears to a single array.
+    // Used after overlap has been removed.
     var concatGear = [];
     for(gear = 0; gear < gearbox.length; gear++){
         concatGear = concatGear.concat(gearbox[gear]);
@@ -123,14 +122,14 @@ function concatGears(gearbox){
 }
 
 function speed2rpm(vehicle, gear, speed){
-    //calculate speed from rpm.
-    let ms = speed / 3.6; //kmh to ms
+    // Calculate speed from rpm.
+    let ms = speed / 3.6; // km/h to m/s
     let wheelrpm = ms / (getWheelRadius(vehicle.wheel) * 2 * Math.PI) * 60;
     return wheelrpm * getGearRatio(vehicle, gear);
 }
 
 function rpm2speed(vehicle, gear, rpm) {
-    //Returns speed for a given vehicle, gear and rpm.
+    // Returns speed for a given vehicle, gear and rpm.
     let wheelrpm = rpm/getGearRatio(vehicle, gear);
     let wheelLength = getWheelRadius(vehicle.wheel) * 2 * Math.PI;
     let mstokmh = 60/1000; //Converts rpm to rph and m to km.
@@ -158,40 +157,56 @@ function getMaxTqIndex(v){
     return v.torque.reduce((iMax, x, i, arr) => x > arr[iMax] ? i : iMax, 0);
 }
 
-
-
 function getWheelRadius(wheel) {
-    //Calculates total radius of rim + tire in meter.
-    let size = wheel.size*2.54 //inch to cm
-    let width = wheel.width/10 //mm to cm
-    let profile = wheel.profile/100 //to percent
-    return (size + 2*width*profile) / 2 / 100;
+    // Calculates total radius of rim + tire in meter.
+    let size = wheel.size * 2.54        //inch to cm
+    let width = wheel.width / 10        //mm to cm
+    let profile = wheel.profile / 100   //to percent
+    return (size + 2 * width * profile) / 2 / 100;
 }
 
 function getGearRatio(vehicle, gear){
-    //Return effective gear ratio from engine to rear wheel.
+    // Return effective gear ratio from engine to rear wheel.
     return vehicle.gearbox[gear]*vehicle.primary*vehicle.rearSprocket/vehicle.frontSprocket;
 }
 
 function calcResistance(gearbox, vehicle, calcAero){
-    //CalcAero is 1 for calculating air resistance or 0 for not.
 
-    //Inject top speed coordinate.
-    if(calcAero == 1){
+    // Inject top speed coordinate.
+    if(calcAero){
         //Loop to find element above top speed.
         let topGear = gearbox[gearbox.length-1];
 
+        // WIP fix this
+        console.log(gearbox.length-1)
+
         for(let rpm = 0; rpm < topGear.length; rpm++){
             if(topGear[rpm].x > vehicle.topSpeed){
-                //We want to insert a new element at this location.
-                //Clone the element and add it.
-                let power = kxym(topGear, rpm, vehicle.topSpeed);
-                let slice = topGear.slice((rpm-1), rpm);
-                topGear.splice(rpm, 0, slice);
-                //Modify the cloned element.
+                if(rpm == 0){
+                    topGear = gearbox[gearbox.length-2]
+                }
+                else {
+                // Insert a new element at this location.
+                // Clone the element and add it.
+                console.log("HIT", topGear[rpm].x, vehicle.model, rpm)
+                let power = kxym(topGear, rpm, vehicle.topSpeed);  //function kxym(gear, index, xvalue){
+                // Skicka in koordinater för en växel
+                // Skicka in indexet för högre än top speed
+                // Tillbaka ska ett nytt y komma, punkten som ligger mellan 
+                //let slice = topGear.slice((rpm-1), rpm)[0];
+                topGear.splice(rpm, 0, {"x":0,"Y":0, "label":"Empty"});
+                // Modify the cloned element.
+
+                console.log("spd old: ", topGear[rpm-1].x); // = vehicle.topSpeed;
+                console.log("spd new: ", topGear[rpm].x) // = vehicle.topSpeed;
+                console.log("pow old ", topGear[rpm-1].y = power);
+                console.log("pow new ", topGear[rpm].y = power);
+                topGear[rpm].label = "Interpolated point"
                 topGear[rpm].x = vehicle.topSpeed;
                 topGear[rpm].y = power;
+                console.log("NO HIT")
                 break;
+                }  
             }
         }
     }
@@ -202,7 +217,12 @@ function calcResistance(gearbox, vehicle, calcAero){
             let force = gearbox[gear][rpm].y;
             let drag = ((speed/3.6) * (speed/3.6)) * 0.5 * 1.2 * vehicle.drag;
             // v^2 * 0.5 * air fluidity at 20c * CdA
-            gearbox[gear][rpm].y = (force - drag*calcAero) / (vehicle.wetWeight + driverWeight) / 9.82;
+            if(calcAero){
+                gearbox[gear][rpm].y = (force - drag) / (vehicle.wetWeight + driverWeight) / 9.82;
+            }
+            else {
+                gearbox[gear][rpm].y = force / (vehicle.wetWeight + driverWeight) / 9.82;
+            }
             gearbox[gear][rpm].label = 
                 vehicle.brand + " " + vehicle.model + " - " +
                 "Gear: " + (gear+1) + ", " + 
@@ -239,7 +259,7 @@ function gear2wheelThrust(vehicle, gear){
 }
 
 function getWheelThrust(vehicle){
-    //Calculates coordinates of thrust vs rpm for each gear.
+    // Calculates coordinates of thrust vs rpm for each gear.
 
     let coordinates = [];
     for(gear = 0; gear < vehicle.gearbox.length; gear++){
@@ -250,7 +270,7 @@ function getWheelThrust(vehicle){
 }
 
 function getVehicleDrag(vehicle){
-    //Used in pagetools.js to calculate drag at TopSpeed.
+    // Used in pagetools.js to calculate drag at TopSpeed.
 
     var gears = getWheelThrust(vehicle);
     var topGear = gears[gears.length-1];
@@ -331,12 +351,12 @@ function getVehicleTopSpeed(vehicle, front, rear){
 }
 
 
-function kxym(gear, index, xvalue){
-    //Returns a new Y value for a given X.
-    var y = gear[index].y - gear[index - 1].y;
-    var x = gear[index].x - gear[index - 1].x;
-    var k = y/x;
-    var m =  gear[index].y - gear[index].x * k;
+function kxym(array, index, xvalue){
+    // Interpolates a new Y value for a given X.
+    var y = array[index].y - array[index - 1].y;
+    var x = array[index].x - array[index - 1].x;
+    var k = y / x;
+    var m =  array[index].y - (array[index].x * k);
 
     return xvalue * k + m;
 }
@@ -357,12 +377,12 @@ function step(i, gr1, j, gr2){
 }
 
 function lbft2Nm(arr){
-    //Used to convert dyno values in motorcycles.js
+    // Used to convert dyno values in motorcycles.js
     return multiplyArray(arr, 1.3558179483314);
 }
 
 function roundArray(arr, decimals){
-    //Used by pagetools.js
+    // Used by pagetools.js
     if(decimals === undefined){
         decimals = 0;
     }

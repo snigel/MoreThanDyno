@@ -13,9 +13,9 @@ function sortVehicles(){
 var vehicles =  [
 {
     brand: "Kawasaki",
-    model: "er6",
+    model: "er6f",
     year:  "2009-2011",
-    topSpeed: 210,
+    topSpeed: 205,
     wetWeight: 210,
     drag: 0,
 
@@ -140,7 +140,7 @@ var vehicles =  [
     brand: "Honda",
     model: "Goldwing GL1800",
     year:  "2009",
-    topspeed:   202,
+    topSpeed:   202,
     wetWeight : 410,
     drag: 0,
 
@@ -190,7 +190,7 @@ var vehicles =  [
     brand: "KTM",
     model: "690 Duke",
     year:  "2008-2011",
-    topSpeed:  0,
+    topSpeed:  188,
     wetWeight:  160.6,
     drag: 0,
 
@@ -209,7 +209,7 @@ var vehicles =  [
     dynoRpm:     [3000, 3500, 4000, 4500, 5000, 5500, 6000, 6500, 7000, 7500, 8000, 8500],
     dynoTorque:  [40,45,45,52,54,61,57,57,56,53,49,46],
     revLimit: 0,
-    metric: false
+    metric: true
 },
 {
     brand: "Honda",
@@ -342,8 +342,8 @@ var vehicles =  [
     brand: "Volkswagen",
     model: "Passat 2.0 DSG6",
     year:  "2014",
-    topSpeed:  0,
-    wetWeight: 1406,
+    topSpeed:  220,
+    wetWeight: 1705,
     drag: 0,
 
     wheel:
@@ -389,5 +389,83 @@ var vehicles =  [
     dynoTorque: [70,78,74,81,88,90,93,97,100,102,104,106,106,107,106,106,104,102,100,95,91,87],
     revLimit: 13200,
     metric: true
+},
+{
+    brand: "Aprilia",
+    model: "Tuono 1000 R",
+    year: "2012-2014",
+    topSpeed: 267,
+    wetWeight: 218,
+    drag: 0,
+
+    wheel:
+    {
+        size: 17,
+        width: 190,
+        profile: 55
+    },
+
+    primary: 1.659,
+    frontSprocket: 16,
+    rearSprocket: 42,
+    gearbox: [2.6,2.063,1.7,1.455,1.308,1.222],
+
+    dynoSource: "https://www.cycleworld.com/resizer/0HuzOaazgs2RbcX4Afue7Jj0_eI=/590x378/smart/cloudfront-us-east-1.images.arcpublishing.com/octane/7BSWXEBDUFDPVK4DC3KI6YF33U.jpg",
+    dynoRpm: [2500,3000,3500,4000,4500,5000,5500,6000,6500,7000,7500,8000,8500,9000,9500,10000,10500,11000,11500,12000,12500],
+    dynoTorque: [42,61,69,73,77,79,81,85,88,88,92,95,98,102,106,100,98,96,94,89,57],
+    revLimit: 12500,
+    metric: true
+},
+{
+brand: "Peugeot",
+model: "508",
+year: "2011-2017",
+topSpeed: 232,
+drag: 0.9103,
+wetWeight: 1705,
+
+wheel:
+{
+size: 18,
+width: 235,
+profile: 45
+},
+
+primary: 3.53,
+frontSprocket: 1,
+rearSprocket: 1,
+gearbox: [4.148,2.37,1.556,1.155,0.859,0.686],
+
+dynoRpm: [1000,1500,1750,2000,2250,2750,3250,3500,4000,4500],
+dynoTorque: [208,329,394,446,450,438,422,403,358,309],
+revLimit: 4500,
+metric: true,
+dynoSource: "enginecoders.com",
+},
+{
+brand: "Peugeot",
+model: "508 Stage 1",
+year: "2011-2017",
+topSpeed: 0,
+drag: 0.9103,
+wetWeight: 1705,
+
+wheel:
+{
+size: 18,
+width: 235,
+profile: 45
+},
+
+primary: 3.53,
+frontSprocket: 1,
+rearSprocket: 1,
+gearbox: [4.148,2.37,1.556,1.155,0.859,0.686],
+
+dynoRpm: [1000,1500,1750,2000,2250,2750,3250,3500,4000,4500],
+dynoTorque: [208,357,440,497,507,505,495,477,415,363],
+revLimit: 4500,
+metric: true,
+dynoSource: "enginecoders.com",
 }
 ];
